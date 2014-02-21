@@ -1,0 +1,599 @@
+@font-face
+{
+	font-family: HelveticaLight;
+	src: url('../fonts/Helvetica 25 Ultra Light.ttf') format('truetype');
+}
+
+#main .point .shares .share a:hover,
+
+button{background-color: #008298 !important;}
+button:hover{background-color: #ff2d00 !important;}
+
+body
+{
+  background-color: #151515;
+  font-size: 13px;
+}
+
+body,
+html
+{
+  padding: 0;
+  margin: 0;
+  min-height: 100%;
+  height: 100%;
+}
+
+select,
+input[type="text"],
+input[type="password"],
+textarea,
+button{margin-bottom: 3px; padding: 3px; height: 25px;}
+
+select,
+input[type="text"],
+input[type="password"],
+button{height: 25px;}
+
+/*
+	@max-width: inherit	Override default Foundation Framework 
+	that causes a bug in the Gmap's InfoWindow.
+*/
+img{max-width: inherit;}
+
+.select2-result-label{font-family: Helvetica; font-size: 14px;}
+.select2-result-label:hover{background-color: #008297; color: #fff;}
+.select2-choices{font-family: Helvetica; font-size: 13px;}
+.select2-container{min-width: 320px; margin-bottom: 16px;}
+.select2-container-multi .select2-choices .select2-search-choice
+{
+  margin-top: 9px;
+  color: #008297;
+  font-size: 13px;
+}
+
+.select2-results li:last-child
+{
+  border-bottom: none;
+  padding-bottom: 0;
+}
+.select2-results li
+{
+  border-bottom: 1px solid #ccc;
+  padding-bottom: 7px;
+}
+.select2-results .searchResult .name{font-weight: bold;}
+
+.top-bar .name,
+.top-bar
+{
+  height: 30px;
+}
+.top-bar
+{
+  background-color: #151515 !important;
+}
+.top-bar .title-area{height: 100%;}
+.top-bar .toggle-topbar.menu-icon a
+{
+  text-indent: -5px; 
+  font-size: 15px;
+}
+.top-bar-section ul li > a{background: #008298;}
+
+nav a h3
+{
+  color: #fff; 
+  margin: 0; 
+  font-size: 20px; 
+  font-family: HelveticaLight;
+}
+
+.logo
+{
+  height: 60px;
+  margin-top: 20px;
+  text-align: center;
+}
+
+nav > div
+{
+  display: inline-block; 
+  position: relative; 
+  left: 6px; 
+  top: 5px;
+}
+
+.verticalsCntr
+{
+  margin-top: 6px;
+  margin-left: -6px;
+}
+
+h4{font-size: 19px;}
+
+#main,
+#main .radius,
+#main .point,
+#gmap{height: 100%;}
+
+#main .point > div{position: relative;}
+#main .point ul
+{
+  margin: 3px 3px;
+  position: absolute;
+  z-index: 3;
+  top: 88px;
+}
+#main .point li{list-style-type: none;}
+#main .point button
+{
+  width: 30px; 
+  height: 33px; 
+  margin: 1px 0;
+}
+
+#main .point div ul li > button img
+{
+  position: relative; 
+  top: -3px;
+}
+#main .point .shares .share img,
+#main .point button img{width: 18px;}
+
+#main .point .shares,
+#main .point .shares .shareUrl{position: relative;}
+
+#main .point .shares .share
+{
+  width: 175px;
+  height: 34px;
+  background-color: #008298;
+  position: absolute;
+  top: 0;
+  left: 33px;
+}
+
+#main .point .shares .share li,
+#main .point .shares button,
+#main .point .shares .share,
+#main .point .shares .share .sharedUrl input{display: inline-block;}
+
+#main .point .shares .share ul,
+#main .point .shares .share .sharedUrl{position: absolute;}
+
+#main .point .shares .share a
+{
+  display: block;
+  width: 100%;
+  height: 34px;
+  position: relative;
+  top: -3px;
+  padding-top: 3px;
+}
+
+#main .point .shares .share .sharedUrl
+{
+  top: 36px;
+  left: 0px;
+  width: 201px;
+  height: 37px;
+  background-color: #008298;
+  color: #fff;
+  padding-top: 0;
+  text-align: left;
+}
+#main .point .shares .share .sharedUrl input{width: 201px;}
+
+#main .point .shares .share > ul
+{
+  top: -3px;
+  left: -3px;
+  height: 34px;
+}
+#main .point .shares .share > ul li
+{
+  width: 40px;
+  height: 40px;
+  padding-top: 3px;
+  text-align: center;
+}
+
+#main
+{
+  padding: 0;
+  margin: 0 5px;
+}
+
+input[type=submit], 
+input[type='reset']
+{
+  text-decoration: none;
+  background-color: #008298;
+  color: #fff;
+  padding: 10px 8px;
+  cursor: pointer;
+}
+
+input[type=submit], 
+input[type='reset']{border: 0;}
+
+#sidebar ul
+{
+  margin: 0; 
+  position: relative;
+}
+#sidebar li
+{
+  list-style-type: none;
+  width: 40px;
+  height: 70px;
+  padding-top: 10px;
+  padding-left: 10px;
+}
+#sidebar li:nth-child(1){border-left: none;}
+
+.option{padding: 10px 0;}
+
+.option a,
+.listing .fi-x,
+.listing .fi-eye
+{
+  color: #008298;
+  background-color: transparent;
+}
+
+.option ul{margin: 0;}
+.option li
+{
+  list-style-type: none;
+  display: inline-block;
+  width: 65px;
+}
+
+.option a,
+.listing .fi-x,
+.listing .fi-eye
+{
+  color: #000;
+  display: inline-block;
+  width: 60px;
+}
+
+.columns{padding: 0;}
+button
+{
+  width: 100%;
+  font-family: HelveticaLight;
+  font-size: 17px;
+  padding: 0;
+}
+
+nav,
+#sidebar,
+footer,
+#sidebar ul,
+#sidebar,
+.xdsoft_timepicker .xdsoft_time_box  > div > div.xdsoft_current,
+.xdsoft_calendar td.xdsoft_current
+{
+  background-color: #008298 !important;
+}
+
+#sidebar
+{
+  width: 60px;
+  padding-right: 0;
+  padding-left: 0;
+  height: 100%;
+  position: fixed;
+  top: 0;
+  z-index: 1;
+}
+#sidebar ol{padding-left: 15px;}
+
+.social-btns,
+#sidebar a
+{
+  padding: 0;
+  background-color: transparent;
+  color: #008298;
+  display: inline-block;
+}
+
+#sidebar .socialCntr{position: relative;}
+#sidebar .socialCntr ul
+{
+  position: absolute;
+  left: 60px;
+  top: -8px;
+  display: none;
+  border: 1px solid #ccc;
+  width: 200px;
+  height: 55px;
+}
+#sidebar .socialCntr ul li
+{
+  display: inline-block;
+  text-align: center;
+  padding: 10px 0;
+}
+
+#sidebar div{padding-left: 10px;}
+
+#gmap
+{
+  width: 100%;
+  border: 1px solid #ccc;
+}
+
+h2 a
+{
+  padding-left: 0;
+  color: #000;
+  background-color: #fff;
+  font-style: italic;
+}
+.subTitle
+{ 
+  margin-top: -7px;
+  font-style: normal;
+}
+
+.controls{margin-top: 10px;}
+
+table
+{
+  margin-top: 12px;
+  width: 100%; 
+  border: 1px solid gray;
+  text-align: center;
+  border: 1px solid #ccc;
+}
+table thead{font-weight: bold;}
+table thead tr td{text-align: center;}
+
+.resetPassword
+{
+  background-color: transparent;
+  color: #008298;
+}
+
+#content
+{
+  margin-left: 193px;
+  height: 100%;
+  background-color: #f4f4f4;
+}
+footer
+{
+  width: 187px;
+  position: fixed; 
+  bottom: 7px;
+  text-align: center;
+}
+footer i{font-size: 28px; padding: 0;}
+footer a,
+footer a:hover
+{
+  color: #008298; 
+  background-color: transparent;
+  width: 30px;
+}
+
+
+/**** Forms. *****/
+.center.middle
+{
+  left: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  margin: auto;
+  position: absolute;
+}
+.info > div{padding: 10px 0;}
+
+
+.radius.create .gmap
+{
+  height: 300px;
+  border: 1px solid #ccc;
+  margin-bottom: 16px;
+}
+.radius.create.center.middle input[type='text'],
+.radius.create.center.middle textarea{width: 200px;}
+
+.radius input[type='text'],
+.radius input[type='password'],
+
+.login.center.middle
+{
+  width: 300px;
+  height: 150px;
+}
+
+.radius.reset.center.middle,
+.radius.read.center.middle,
+.radius.update.center.middle{width: 300px;}
+
+.radius.read table{border: 1px solid #ccc;}
+
+.radius.read table td:nth-child(1),
+.user.read table td:nth-child(1),
+.radius.update table td:nth-child(1),
+.user.update table td:nth-child(1)
+{
+  text-align: right; 
+  width: 70px;
+}
+
+.radius.read table td:nth-child(2),
+.user.read table td:nth-child(2){text-align: left;}
+
+.radius.read table label
+.user.read table label{margin: 0;}
+
+
+.row{max-width: inherit; margin: 0;}
+
+#main .radius .row div{padding: 4px;}
+
+.radius .btnVerticals a{font-size: 15px;}
+.radius .verticals input[type="checkbox"] + label, input[type="radio"] + label{margin-right: 0;}
+.radius .verticals .reveal-modal{padding: 7px;}
+
+.verticals li{height: 20px; padding: 0; margin: 0;}
+.verticals .columns{margin: 0; padding: 0;}
+
+.info ol{color: #929292; margin: 0 20px;}
+
+.reports ul{margin: 0; padding: 0; width: 100%;}
+
+.reports ul,
+.reports li{display: inline-block; margin-top: 3px;}
+
+.reports li
+{
+  list-style-type: none;
+  text-align: center;
+  padding: 0 5px;
+}
+.reports li a{display: block;}
+.reports .legend,
+.reports .legend .searches,
+.reports .legend .expansions{width: 126px;}
+
+.reports .legend ul{margin-left: 0;}
+.reports .legend .searches{background-color: rgba(220,220,220,0.5);}
+.reports .legend .expansions{background-color: rgba(151,187,205,0.5);}
+
+.reports .legend .searches,
+.reports .legend .expansions
+{
+  height: 20px;
+  list-style-type: none;
+  padding: 2px;
+}
+.reports .title
+{
+  color: #fff;
+  background-color: #59a; 
+  padding: 10px;
+  min-height: 30px;
+}
+.reports #chartData
+{
+  display: none;
+  height: 300px;
+  width: 100%;
+}
+
+.info section{margin: 30px 0;line-height: 22px;}
+.info .about .gmap
+{
+  width: 100%;
+  height: 300px;
+  border: 1px solid #ccc;
+  display: inline-block;
+}
+
+.info .about .contact,
+.info .about .contact a{color: #666;}
+.info .about .contact span
+{
+  border-right: 1px solid;
+  padding: 0 12px;
+}
+.info .about .contact span:last-child{border: none;}
+.info .about .details
+{
+  border: 1px solid #ccc;
+  padding: 10px;
+  margin: auto;
+}
+
+.info .about .details .homeAddr{margin-bottom: 10px;}
+.info .social
+{
+  background-color: #008CBA; 
+  padding: 15px 0; 
+  text-align: center;
+}
+.info .social ul{padding: 0; margin: 0;}
+.info .social li
+{
+  display: inline-block;
+  list-style-type: none;
+  width: 50px;
+}
+
+.settings ul{margin: 0;}
+.settings li{list-style-type: none;}
+
+/*Moment*/
+#moments .moment a{color: #fff;}
+#moments .moments
+{
+  height: 235px;
+  overflow-y: auto;
+}
+#moments .moment
+{
+  position: relative;
+  padding-left: 30px;
+  margin-top: 15px;
+  min-height: 25px;
+  border-bottom: 1px solid rgba(204, 204, 204, 0.04);
+  padding-bottom: 10px;
+}
+#moments .moment .details > .row{margin-bottom: 13px;}
+#moments .row,
+#moments .details .social
+{
+  margin: 0;
+}
+#moments .details .social li
+{
+  padding: 0;
+  list-style-type: none;
+  width: 20px;
+  display: inline-block;
+}
+#moments .btnPing
+{
+  display: inline-block;
+  height: 50px;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+#moments .details .descr
+{
+  color: #fff;
+  font-size: 12px;
+  display: none;
+}
+#moments .details .social
+{
+  text-align: right;
+  padding-right: 15px;
+  height: 15px;
+}
+#moments .details .social li a img{width: 15px;}
+#moments .map
+{
+  background-color: #fff;
+  margin-top: 2px;
+  height: 200px;
+}
+#moments .map .btnCollapse{display: none;}
+#moments .moment .btnTitle{font-size: 14px;}
+
+@media only screen and (min-width: 40.063em)
+{
+  .top-bar-section li a:not(.button):hover,
+  .top-bar-section li a:not(.button){background: transparent;}
+  .top-bar-section ul li{margin-left: 5px;}
+  .top-bar-section li a:not(.button){line-height: 30px;}
+}
