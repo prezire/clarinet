@@ -12,6 +12,45 @@
     {
       $this->load->view('moments/test');
     }
+    //Allow user to be a responder and 
+    //provide services per vertical.
+    /*
+    * @param  $state    Is determined based on 
+    * prev state from DB.
+    */
+    public final function setAsResponder
+    (
+      $userId, 
+      $latLng,
+      $verticalId, 
+      $state = true)
+    {
+      $b = $this->moment_model->setAsResponder
+      (
+        $userId, 
+        $latLng,
+        $verticalId, 
+        $state
+      );
+      showJsonView(array('state' => $b));
+    }
+    public final function readByFilter($userId, $filterName)
+    {
+      echo $this->parser->parse
+      (
+        'commons/partials/moments.php', 
+        array
+        (
+          'moments' => 
+          $this->moment_model->readByFilter
+          (
+            $userId, 
+            $filterName
+          )
+        ), 
+        true
+      );
+    }
     public final function index()
     {
       showView
@@ -20,20 +59,22 @@
         array
         (
           //TODO: Include verticals in the filter.
-          'sort' => array
+          'filter' => array
           (
             'All',
             'Featured',
             'Mostly Used',
-            'Emergency'
+            'For Emergencies',
+            'I am the responder'
           ),
           'moments' => $this->moment_model->index()
         )
       );
     }
-    public final function generateAppKey($name, $password)
+    //curl 'http://localhost/clarinet/index.php/moment/generateAppKey'
+    public final function generateAppKey()
     {
-      return $this->moment_model->generateAppKey($name, $password);
+      echo $this->moment_model->generateAppKey();
     }
     //Public ping/pong. Doesn't need integration. Everyone 
     //registered in the app can use this feature.
@@ -133,11 +174,10 @@
     {
       if($this->input->post())
       {
-        $b = $this->getIsValidForm();
-        if($b)
+        if($this->getIsValidForm())
         {
-          $id = $this->moment_model->create();
-          if($id)
+          $m = $this->moment_model->create();
+          if($m->id > 0)
           {
             redirect(site_url('moment/read' . $id));
           }
@@ -156,16 +196,16 @@
         showView('moments/create');
       }
     }
+    //curl 'http://localhost/clarinet/index.php/moment/read/1'
     public final function read($id)
     {
       showView
       (
-        $this, 
         'moments/read', 
         array
         (
           'moment' => 
-          $this->moment_model->read($id)
+          $this->moment_model->read($id)->row()
         )
       );
     }
@@ -222,15 +262,14 @@
       }
       else
       {
-        echo $this->load->view
+        showView
         (
           'moments/update', 
           array
           (
             'moment' => 
             $this->moment_model->read($id)
-          ), 
-          true
+          )
         );
       }
     }
@@ -249,5 +288,22 @@
     private final function getIsValidForm()
     {
       return true;
+    }
+    //curl 'http://localhost/clarinet/index.php/moment/getRespondersWithinRadius/1/1/10/medical'
+    public final function getRespondersWithinRadius
+    (
+      $longitude, 
+      $latitude, 
+      $radius, 
+      $keywords
+    )
+    {
+      $r = $this->moment_model->getRespondersWithinRadius
+      (
+        $longitude, 
+        $latitude, 
+        $radius, 
+        $keywords
+      );
     }
   }

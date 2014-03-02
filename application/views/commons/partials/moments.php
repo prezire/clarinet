@@ -1,9 +1,16 @@
 <div class="moments large-12 medium-12 small-12 columns">
-  <?php $s = base_url('public/images') . '/'; ?>
+  <?php 
+    $s = base_url('public/images') . '/';
+    $uId = $this->session->userdata('user')->id;
+  ?>
   {moments}
     <div class="moment">
     
-      <input type="hidden" name="id" value="{id}" />
+      <!-- 
+        Hidden fields are for the other options such as
+        popup windows for prompts, etc. Use this through
+        JS and parse by relatively.
+      -->
       <input type="hidden" 
               name="pingAllowSndOptMsg" 
               value="{ping_allow_send_optional_message}" />
@@ -32,36 +39,62 @@
               name="afterSrvSndPmtMsg" 
               value="{after_service_prompt_message}" />
       
-      <div class="btnPing">
-        <a href="{btnIconPath}" class="btnIcon">
-          <img src="<?php echo $s; ?>{icon}" />
+      <div class="pings">
+        <a href="#" 
+            id="{id}" 
+            title="{name}" 
+            icon="{icon}"
+            class="btnIcon">
+          <img src="{icon}" />
         </a>
       </div>
       <div class="details">
         <div class="row">
           <div class="title large-10 medium-6 small-6 columns">
-            <a href="{btnTitlePath}" class="btnTitle">
+            <a href="#" 
+                id="{id}" 
+                title="{name}" 
+                class="btnTitle" 
+                icon="{icon}">
               {name}
             </a>
           </div>
           <ul class="social large-2 medium-4 small-6 columns">
             <li>
+              <a href="<?php echo site_url('moment/read'); ?>/{id}" 
+                  class="btnRead" 
+                  title="Read">
+                <img src="<?php echo $s . 'pencil.png'; ?>" />
+              </a>
+            </li>
+             <li>
+              <?php 
+                $sSetAsRspndr = site_url('moment/setAsResponder') . 
+                '/' . $uId;
+              ?>
+              <a href="<?php echo $sSetAsRspndr; ?>/{verticals_id}/{state}"
+                  class="btnSetAsRspndr" 
+                  title="You are a responder of this moment.">
+                <img src="<?php echo $s . 'responder_state_false.png'; ?>" />
+              </a>
+            </li>
+            <li>
               <a href="{btnFbPath}" 
-                  class="btnFb" 
+                  class="fb popup" 
                   title="FB">
                 <img src="<?php echo $s . 'social_fb.png'; ?>" />
               </a>
             </li>
             <li>
               <a href="{btnTwitterPath}" 
-                  class="btnTwitter" 
+                  class="twitter popup" 
                   title="Twitter">
                 <img src="<?php echo $s . 'social_twitter.png'; ?>" />
               </a>
             </li>
             <li>
               <a href="{btnGplusPath}" 
-                  class="btnGplus" 
+                  class="gplus popup" 
                   title="Google+">
                 <img src="<?php echo $s . 'social_gplus.png'; ?>" />
               </a>

@@ -1,6 +1,8 @@
 var Clarinet = Backbone.Model.extend
 ({
   gm: null,
+  sRelUrl: 'http://localhost/clarinet/index.php/',
+  sPubUrl: 'http://localhost/clarinet/public/',
   constructor: function()
   {
     this.setListeners();  
@@ -99,15 +101,23 @@ var Moment = Clarinet.extend
     responded within an hour, mark it as unconfirmed in DB.
   */
   sTok: null,
-  sUserState: null,
+  //sUserState: null,
   sUserId: null,
   sVert: null,
   iPong: null,
   //
   constructor: function()
   {
-    this.setUserState($('.selUserState').val());
+    //this.setUserState($('.selUserState').val());
     this.setListeners();
+  },
+  setAppKey: function()
+  {
+    $.ajax({url: this.sRelUrl + '/moment/generateAppKey', 
+    success:function(response){
+      $('.appKey').val(response);
+      $('.txtAppKey').html(response);
+    }});
   },
   setUserId: function(value)
   {
@@ -118,7 +128,7 @@ var Moment = Clarinet.extend
   * Default state will be in the settings.
   * @param  state   Either sender or responder.
   */
-  setUserState: function(state)
+  /*setUserState: function(state)
   {
     var o = this;
     this.sUserState = state;
@@ -139,29 +149,235 @@ var Moment = Clarinet.extend
       }
       //Do nothing.
     }
+  },*/
+  expandMap: function(expand, icon,title, momentId)
+  {
+    if(expand)
+    {
+      var o = this;
+      $('#moments .map .icon').attr('src', icon);
+      $('#moments .map .title').html(title);
+      //Ping, but this time, force to ask for responders.
+      $('#moments .map .btnBroadcast').click
+      (
+        function(e)
+        {
+          e.preventDefault();
+          o.ping(momentId, true);
+        }
+      );
+    }
+    $('#moments .map').animate
+    (
+      {height: expand ? '400px' : 0}
+    );
+  },
+  //KLUDGE Not using btn callback 
+  //to prevent losing the ref.
+  onPing: function(target)
+  {
+    var t = target
+    var momentId = t.attr('id');
+    var title = t.attr('title');
+    var icon = t.attr('icon');
+    this.expandMap
+    (
+      true, 
+      icon, 
+      title, 
+      momentId
+    );
+    //
+    var bAskForRspndr = t == $('#moments .moment .btnIcon');
+    this.ping(momentId, bAskForRspndr);
   },
   setListeners: function()
   {
     var o = this;
-    $('.btnSetUserState').click(function(){
+    /*$('.btnSetUserState').click(function(){
       o.setUserState($('.selUserState').val());
+    });*/
+    $('#moments .map .btnCollapse').click
+    (
+      function(e)
+      {
+        e.preventDefault();
+        o.expandMap(false);
+      }
+    );
+    //Toggle as responder.
+    $('#moments .moment .btnSetAsRspndr').click
+    (
+      function(e)
+      {
+        e.preventDefault();
+        var o = this;
+        var t = $(this);
+        var img = t.children('img');
+        var url = t.attr('href');
+        $.ajax
+        (
+          {
+            url: url, 
+            success: function(response)
+            {
+              /*
+                TODO: Create a global interval 
+                as listener for all pings 
+                requesting for services if user
+                decides to set himself as a 
+                responder for any Moments.
+              */
+              var s = response.state ? 
+              'responder_state_true' : 
+              'responder_state_false';
+              img.attr('src', o.sPubUrl + s + '.png');
+            }
+          }
+        );
+      }
+    );
+    //Ping but don't ask for services.
+    $('#moments .moment .btnTitle').click
+    (
+      function(e)
+      {
+        e.preventDefault();
+        o.onPing($(this));
+      }
+    );
+    //Ping and ask for services.
+    $('#moments .moment .btnIcon').click
+    (
+      function(e)
+      {
+        e.preventDefault();
+        o.onPing($(this));
+      }
+    );
+    //
+    $('#moments .moment .btnShowDescr').click
+    (
+      function(e)
+      {
+        e.preventDefault();
+        var p = $(this).
+                parent().
+                parent().
+                parent().
+                parent();
+        $(p.children('div')[1]).slideToggle();
+      }
+    );
+    //
+    $('#moments .create .cbPrivate').click
+    (
+      function()
+      {
+        var t = $(this);
+        var p = $('#moments .create .private');
+        //TODO: Change to propery jQuery selector.
+        var bIsPrivate = t[0]['checked'];
+        if(bIsPrivate)
+        {
+          p.css('height', '100%');
+        }
+        else
+        {
+          p.css('height', '20px');
+        }
+      }
+    );
+    //
+    //Filters.
+    $('#moments .create .filter').change(function(){
+      var t = $(this).text();
+      var s = null;
+      switch(t)
+      {
+        case 'All':
+          //
+        break;
+        case 'Featured':
+          //
+        break;
+        case 'For Emergencies':
+          //
+        break;
+        case 'I am the responder':
+          //
+        break;
+      }
+      var url = s + 
+      this.sUserId + '/' + 
+      encodeURIComponent(url);
+      $.ajax({url: url, success: function(response){
+        $('#moments .moments .moment').html(response);
+      }});
     });
-    $('#moments .moment .btnTitle').click(function(e){
-      e.preventDefault();
-      var p = $(this).parent().parent().parent().parent();
-      var id = p.children('input').val();
-      o.ping(id, false);
+    //Search user by email for Moment create.
+    //
+    //Social.
+    $('.twitter.popup').click(function(){
+      var t = $(this);
+      var width  = 575;
+      var height = 400;
+      var left = ($(window).width()  - width)  / 2;
+      var top = ($(window).height() - height) / 2;
+      var url = 'http://twitter.com/share?text=' + 
+          encodeURIComponent($('.sharedUrl input').val());
+      var opts  = 'status=1' +
+          ',width=' + width +
+          ',height=' + height +
+          ',top=' + top +
+          ',left=' + left;
+      window.open(url, 'twitter', opts);
+      return false;
     });
-    $('#moments .moment .btnPing').click(function(e){
-      e.preventDefault();
-      var p = $(this).parent();
-      var id = p.children('input').val();
-      o.ping(id, true);
+    $('.gplus.popup').click(function(){
+      var t = $(this);
+      var url = 'https://plus.google.com/share?url=' + 
+          encodeURIComponent($('.sharedUrl input').val());
+      var width  = 575;
+      var height = 400;
+      var left = ($(window).width()  - width)  / 2;
+      var top = ($(window).height() - height) / 2;
+      var opts  = 'status=1' +
+          ',width=' + width +
+          ',height=' + height +
+          ',top=' + top +
+          ',left=' + left + 
+          ',menubar=no, toolbar=no, ' + 
+          'resizable=yes, scrollbar=yes';
+      window.open(url, 'gplus', opts);
+      return false;
     });
-    $('#moments .moment .btnShowDescr').click(function(e){
-      e.preventDefault();
-      var p = $(this).parent().parent().parent().parent();
-      $(p.children('div')[1]).toggle();
+    $('.fb.popup').click(function(){
+      var t = $(this);
+      var width = 400;
+      var height = 300;
+      var leftPosition = (window.screen.width / 2) - ((width / 2) + 10);
+      var topPosition = (window.screen.height / 2) - ((height / 2) + 50);
+      var opts = "status=no,height=" + height + 
+          ",width=" + width + 
+          ",resizable=yes,left=" + leftPosition + 
+          ",top=" + topPosition + 
+          ",screenX=" + leftPosition + 
+          ",screenY=" + topPosition + 
+          ", toolbar=no, menubar=no, " + 
+          "scrollbars=no, location=no, directories=no";
+      var url = $('.sharedUrl input').val();
+      var t = document.title;
+      window.open
+      (
+        'http://www.facebook.com/sharer.php?u=' + 
+        encodeURIComponent(url) + 
+        '&t='+encodeURIComponent(url),
+        'sharer', 
+        opts, 
+        'fb'
+      );
+      return false;
     });
   },
   //Private.
@@ -375,65 +591,7 @@ var Point = new Clarinet.extend
       $('.shares .share .sharedUrl').toggle();
       return false;
     });
-    $('.twitter.popup').click(function(){
-      var width  = 575;
-      var height = 400;
-      var left = ($(window).width()  - width)  / 2;
-      var top = ($(window).height() - height) / 2;
-      var url = 'http://twitter.com/share?text=' + 
-          encodeURIComponent($('.sharedUrl input').val());
-          console.log(url);
-      var opts  = 'status=1' +
-          ',width=' + width +
-          ',height=' + height +
-          ',top=' + top +
-          ',left=' + left;
-      window.open(url, 'twitter', opts);
-      return false;
-    });
-    $('.gplus.popup').click(function(){
-      var url = 'https://plus.google.com/share?url=' + 
-          encodeURIComponent($('.sharedUrl input').val());
-      var width  = 575;
-      var height = 400;
-      var left = ($(window).width()  - width)  / 2;
-      var top = ($(window).height() - height) / 2;
-      var opts  = 'status=1' +
-          ',width=' + width +
-          ',height=' + height +
-          ',top=' + top +
-          ',left=' + left + 
-          ',menubar=no, toolbar=no, ' + 
-          'resizable=yes, scrollbar=yes';
-      window.open(url, 'gplus', opts);
-      return false;
-    });
-    $('.fb.popup').click(function(){
-      var width = 400;
-      var height = 300;
-      var leftPosition = (window.screen.width / 2) - ((width / 2) + 10);
-      var topPosition = (window.screen.height / 2) - ((height / 2) + 50);
-      var opts = "status=no,height=" + height + 
-          ",width=" + width + 
-          ",resizable=yes,left=" + leftPosition + 
-          ",top=" + topPosition + 
-          ",screenX=" + leftPosition + 
-          ",screenY=" + topPosition + 
-          ", toolbar=no, menubar=no, " + 
-          "scrollbars=no, location=no, directories=no";
-      var url = $('.sharedUrl input').val();
-      var t = document.title;
-      window.open
-      (
-        'http://www.facebook.com/sharer.php?u=' + 
-        encodeURIComponent(url) + 
-        '&t='+encodeURIComponent(url),
-        'sharer', 
-        opts, 
-        'fb'
-      );
-      return false;
-    });
+    
     $('.getLoc').click(function(){o.fetchSenderLocation();});
   }
 });

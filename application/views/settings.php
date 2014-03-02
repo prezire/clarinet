@@ -7,11 +7,6 @@
       </a>
     </li>
     <li>
-      <a href="<?php echo site_url('radius/read/' . $d->radius_id); ?>">
-        Company Profile Settings
-      </a>
-    </li>
-    <li>
       <a href="<?php echo site_url('home/settings/view'); ?>">
         View Settings
       </a>

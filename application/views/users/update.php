@@ -1,5 +1,5 @@
 <div class="user update">
-  <h4>UPDATE PROFILE</h4>
+  <h6>Update Profile</h6>
 
   <?php 
     echo validation_errors();
@@ -9,27 +9,106 @@
     <table border="1" cellpadding="0" cellspacing="3">
       <tr>
         <td>
-          <label for="name">COMPLETE NAME*: </label>
+          <label>
+            Avatar
+          </label>
         </td>
         <td>
-          <input type="text" name="name" value="<?php echo $l->complete_name; ?>" />
+          
         </td>
       </tr>
       <tr>
         <td>
-          <label for="email">EMAIL*: </label>
+          <label for="name">
+            Complete Name*
+          </label>
         </td>
         <td>
-          <input type="text" name="email" value="<?php echo $l->email; ?>" />
+          <input type="text" 
+                  name="name" 
+                  value="<?php echo $l->complete_name; ?>" />
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <label for="email">
+            Email*
+          </label>
+        </td>
+        <td>
+          <input type="text" 
+                  name="email" 
+                  value="<?php echo $l->email; ?>" />
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <label>
+            Birth Date
+          </label>
+        </td>
+        <td>
+          
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <label>
+            Mobile
+          </label>
+        </td>
+        <td>
+          
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <label>
+            Landline
+          </label>
+        </td>
+        <td>
+          
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <label>
+            Address
+          </label>
+        </td>
+        <td>
+          
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <label>
+            City
+          </label>
+        </td>
+        <td>
+          
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <label>
+            Country
+          </label>
+        </td>
+        <td>
+          
         </td>
       </tr>
     </table>
     
     <div class="controls">
-      <a href="<?php echo site_url('user/read'); ?>" 
-          class="fi-previous" 
-          title="BACK"></a>
-      <button class="fi-pencil" title="GO"></button>
+      <button>GO</button>
+      <a href="<?php echo site_url('user/read/' . $l->id); ?>" 
+         class="button small">
+          Back
+      </a>
     </div>
     
   </form>

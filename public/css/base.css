@@ -1,3 +1,6 @@
+a{color: #000;}
+a:hover{color: #FF2D00;}
+
 @font-face
 {
 	font-family: HelveticaLight;
@@ -9,11 +12,7 @@
 button{background-color: #008298 !important;}
 button:hover{background-color: #ff2d00 !important;}
 
-body
-{
-  background-color: #151515;
-  font-size: 13px;
-}
+body{font-size: 14px; line-height: 15px;}
 
 body,
 html
@@ -24,7 +23,18 @@ html
   height: 100%;
 }
 
-select,
+textarea{height: 115px;}
+
+/*
+  TODO: Change to divs. Buggy section 
+  when using top and bottom.
+*/
+section
+{
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/*select,
 input[type="text"],
 input[type="password"],
 textarea,
@@ -33,7 +43,7 @@ button{margin-bottom: 3px; padding: 3px; height: 25px;}
 select,
 input[type="text"],
 input[type="password"],
-button{height: 25px;}
+button{height: 25px;}*/
 
 /*
 	@max-width: inherit	Override default Foundation Framework 
@@ -65,14 +75,8 @@ img{max-width: inherit;}
 .select2-results .searchResult .name{font-weight: bold;}
 
 .top-bar .name,
-.top-bar
-{
-  height: 30px;
-}
-.top-bar
-{
-  background-color: #151515 !important;
-}
+.top-bar{height: 47px;}
+.top-bar{background-color: #151515 !important;}
 .top-bar .title-area{height: 100%;}
 .top-bar .toggle-topbar.menu-icon a
 {
@@ -82,8 +86,7 @@ img{max-width: inherit;}
 .top-bar-section ul li > a{background: #008298;}
 
 nav a h3
-{
-  color: #fff; 
+{ 
   margin: 0; 
   font-size: 20px; 
   font-family: HelveticaLight;
@@ -202,7 +205,7 @@ h4{font-size: 19px;}
 #main
 {
   padding: 0;
-  margin: 0 5px;
+  margin: 0;
 }
 
 input[type=submit], 
@@ -265,8 +268,6 @@ button
 {
   width: 100%;
   font-family: HelveticaLight;
-  font-size: 17px;
-  padding: 0;
 }
 
 nav,
@@ -489,63 +490,62 @@ footer a:hover
   width: 100%;
 }
 
-.info section{margin: 30px 0;line-height: 22px;}
-.info .about .gmap
-{
-  width: 100%;
-  height: 300px;
-  border: 1px solid #ccc;
-  display: inline-block;
-}
-
-.info .about .contact,
-.info .about .contact a{color: #666;}
-.info .about .contact span
-{
-  border-right: 1px solid;
-  padding: 0 12px;
-}
-.info .about .contact span:last-child{border: none;}
-.info .about .details
-{
-  border: 1px solid #ccc;
-  padding: 10px;
-  margin: auto;
-}
-
-.info .about .details .homeAddr{margin-bottom: 10px;}
-.info .social
-{
-  background-color: #008CBA; 
-  padding: 15px 0; 
-  text-align: center;
-}
-.info .social ul{padding: 0; margin: 0;}
-.info .social li
-{
-  display: inline-block;
-  list-style-type: none;
-  width: 50px;
-}
-
 .settings ul{margin: 0;}
 .settings li{list-style-type: none;}
 
 /*Moment*/
-#moments .moment a{color: #fff;}
-#moments .moments
+#moments .update .limitations label,
+#moments .update .limitations input[type=checkbox],
+#moments .update .limitations input[type=text]{display: inline-block;}
+#moments .update .limitations input[type=text]{text-align: center; width: 60px;}
+
+.button.small{width: 100%;}
+#moments{margin: 15px 10px 0;}
+#moments .btnBroadcast
 {
-  height: 235px;
-  overflow-y: auto;
+  background-color: #FF2D00;
+  color: #fff;
+  padding: 5px 6px 7px;
+  padding-right: 13px;
+}
+#moments .btnBroadcast img{position: relative; top: -1px;}
+#moments .urls label{display: inline-block;}
+#moments .create .private
+{
+  overflow: hidden;
+  background-color: #000;
+  padding: 7px;
+}
+#moments .create input[type='checkbox']{margin: 0;}
+#moments .create .limitations input[type='text']
+{
+  width: 70px;
+  text-align: center;
+}
+#moments .create  .sndrs input[type='text'],
+#moments .create .limitations input[type='text']
+{
+  display: inline-block;
+}
+#moments .moment .btnIcon img
+{
+  width: 20px;
+  position: relative;
 }
 #moments .moment
 {
   position: relative;
-  padding-left: 30px;
-  margin-top: 15px;
+  /*padding-left: 30px;*/
+  margin-top: 5px;
   min-height: 25px;
-  border-bottom: 1px solid rgba(204, 204, 204, 0.04);
-  padding-bottom: 10px;
+  border-bottom: 1px solid #ccc;
+  padding-bottom: 5px;
+}
+#moments .moment .title
+{
+  position: relative;
+  top: 4px;
+  left: 25px;
 }
 #moments .moment .details > .row{margin-bottom: 13px;}
 #moments .row,
@@ -557,10 +557,10 @@ footer a:hover
 {
   padding: 0;
   list-style-type: none;
-  width: 20px;
+  width: 15px;
   display: inline-block;
 }
-#moments .btnPing
+#moments .pings
 {
   display: inline-block;
   height: 50px;
@@ -573,27 +573,104 @@ footer a:hover
   color: #fff;
   font-size: 12px;
   display: none;
+  line-height: 16px;
+  background-color: #594672;
+  padding: 10px;
 }
-#moments .details .social
-{
-  text-align: right;
-  padding-right: 15px;
-  height: 15px;
-}
+#moments .details .social{text-align: right;}
 #moments .details .social li a img{width: 15px;}
 #moments .map
 {
-  background-color: #fff;
-  margin-top: 2px;
-  height: 200px;
+  position: relative;
+  height: 0;
+  overflow: hidden;
+  margin-bottom: 20px;
 }
-#moments .map .btnCollapse{display: none;}
-#moments .moment .btnTitle{font-size: 14px;}
+#moments .createCntr{margin-bottom: 15px;}
+#moments .map a{color: #fff;}
+#moments .map .focused{background-color: #000; padding: 3px 0;}
+#moments .map .btnCollapse
+{
+  position: absolute; 
+  right: 10px; 
+  top: 7px;
+}
+#moments .btnSearch{height: 37px; padding: 0;}
+#moments .map #gmap
+{
+  border: none;
+  background-color: #ccc;
+}
+#moments .create .button.tiny{padding: 5px 10px;}
+#moments .moments{padding: 5px 0;}
+
+/*Home.*/
+#home{text-align: center; margin: 20px 5px; line-height: 20px;}
+#home .faq > div{text-align: left;}
+#home .header{font-size: 16px; margin: 15px 0;}
+#home .subheader
+{
+  font-size: 17px;
+  margin-top: 35px;
+  margin-bottom: 0;
+}
+
+
+#home .about .gmap
+{
+  width: 100%;
+  height: 300px;
+  border: 1px solid #ccc;
+  display: inline-block;
+}
+
+#home .about .contact,
+#home .about .contact a{color: #666;}
+#home .about .contact span
+{
+  border-right: 1px solid;
+  padding: 0 12px;
+}
+#home .about .contact span:last-child{border: none;}
+#home .about .details
+{
+  padding: 10px;
+  margin: auto;
+}
+
+#home .about .details .homeAddr{margin-bottom: 10px;}
+#home .social
+{
+  padding: 15px 0; 
+  text-align: center;
+}
+#home .social ul{padding: 0; margin: 0;}
+#home .social li
+{
+  display: inline-block;
+  list-style-type: none;
+  width: 30px;
+}
+#home .social li img{width: 20px;}
+
+/*Login.*/
+#login .bg
+{
+  z-index: -1;
+  background-image: url(../images/login_bg.jpg);
+  background-size: cover;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+}
+#login .content{margin: 0 10px;}
+#login .logo{margin: 80px 0 30px;}
+
+/*User.*/
+#signup{margin: 0 10px;}
 
 @media only screen and (min-width: 40.063em)
 {
   .top-bar-section li a:not(.button):hover,
   .top-bar-section li a:not(.button){background: transparent;}
-  .top-bar-section ul li{margin-left: 5px;}
-  .top-bar-section li a:not(.button){line-height: 30px;}
 }

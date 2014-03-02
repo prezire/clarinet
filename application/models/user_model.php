@@ -5,6 +5,15 @@
     {
       parent::__construct();
     }
+    public final function searchByEmail($email)
+    {
+      $this->db->select('email, complete_name');
+      return $this->db->get_where
+      (
+        'users', 
+        array('email' => $email)
+      );
+    }
     public final function subscribe()
     {
       $this->db->insert
@@ -48,7 +57,7 @@
     {
       //TODO: Check if pwd forgotten.
       $i = $this->input;
-      $this->db->select('u.id, u.complete_name, u.email, r.id radius_id');
+      $this->db->select('u.id, u.complete_name, u.email, r.id radius_id, u.role_id');
       $this->db->from('radius r');
       $this->db->join('radius_admins ra', 'r.id = ra.radius_id');
       $this->db->join('users u', 'u.id = ra.user_id');

@@ -7,6 +7,28 @@
       parent::__construct();
       $this->load->model('user_model');
     }
+    public final function signup()
+    {
+      showView('users/signup');
+    }
+    //curl 'http://localhost/clarinet/index.php/user/searchByEmail/{}'
+    /*
+    * @param  $email    A url-encoded string.
+    */
+    public final function searchByEmail($email)
+    {
+      showJsonView
+      (
+        array
+        (
+          'user' => 
+          $this->user_model->searchByEmail
+          (
+            $email
+          )->result_array()
+        )
+      );
+    }
     public final function subscribe()
     {
       if($this->input->post())

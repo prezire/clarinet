@@ -1,171 +1,151 @@
-<div id="moment read">
-  <h4>Moment</h4>
-    <div class="row">
-      <div class="large-6 medium-6 small-12 columns">
-        <div>
-          Name:
-          <?php 
-            $m = $moment;
-            echo $m->name;
-          ?>
+<div id="moments">
+  <div class="read">
+    <h6>Moment Details</h6>
+      <?php 
+        $m = $moment;
+        $sIco = $m->icon_path;
+        $sName = $m->name;
+        $sDescr = $m->description;
+        $sVert = $m->vertical;
+        $bPriv = $m->private;
+        $sAppKey = $m->app_key;
+        $bLimMaxPingRad = $m->enable_limited_max_ping_radius;
+        $bLimMaxPongRad = $m->enable_limited_max_pong_radius;
+        $sLimMaxPongRad = $m->limit_max_pong_radius;
+        $bLimMaxPingRspndrs = $m->enable_limited_max_ping_responders;
+        $sLimMaxPingRspndrs = $m->limit_max_ping_responders;
+        $sPingAllowSndOptMsgToRspndr = $m->ping_allow_send_optional_message_to_responder;
+        $bPingUseOptMsgAsSrchKwd = $m->ping_enable_use_optional_message_as_search_keyword;
+        $bPongAutoSndRspndrDescr = $m->pong_enable_auto_send_responder_description;
+        $bPongSndNotifMsgToSndr = $m->pong_enable_send_notification_message_to_sender;
+        $sPongNotifMsgTtl = $m->pong_notification_message_title;
+        $sPongNotifMsg = $m->pong_notification_message;
+        $bAftSvcSndPmtMsgToSndr = $m->after_service_enable_send_prompt_message_to_sender;
+        $sAftSvcPmtMsgTtl = $m->after_service_prompt_message_title;
+        $sAftSvcPmtMsg = $m->after_service_prompt_message;
+      ?>
+      <div>
+        
+        <div class="large-12 medium-12 small-12 columns">
+          <div>
+            Icon <img src="<?php echo $sIco; ?>" />
+          </div>
+          <div>
+            Name <?php echo $sName; ?>
+          </div>
+          <div>
+            Description <?php echo $sDescr; ?>
+          </div>
+          <div>
+            Vertical <?php echo $sVert; ?>
+          </div>
         </div>
-        <div>
-          Description: <?php echo $m->description; ?>
+        
+        <div class="private">
+          <div>
+            <?php echo form_checkbox('', '', $bPriv); ?>
+            Private
+          </div>
+          <div>
+          <div>
+            App Key <?php echo $sAppKey; ?>
+          </div>
+          <div class="sndrs row">
+            <h6>Senders</h6>
+            <!-- TODO: Integrate search with select2. -->
+            <div class="large-11 medium-11 small-9 columns">
+            </div>
+          </div>
+          </div>
         </div>
+        
+      </div>
+      
+      <div class="limitations">
+        <h6>Limitations</h6>
         <div>
-          Vertical: <?php echo $m->vertical; ?>
+          <?php echo form_checkbox('', '', $bLimMaxPingRad); ?>
+          Limit ping radius to
+          <?php echo $m->limit_max_ping_radius; ?> KM
+        </div>
+        
+        <div>
+          <?php echo form_checkbox('', '', $bLimMaxPongRad); ?>
+          Limit pong radius to
+          <?php echo $sLimMaxPongRad; ?> KM
+        </div>
+        
+        <div>
+          <?php echo form_checkbox('', '', $bLimMaxPingRspndrs); ?>
+          Limit maximum ping responders to
+          <?php echo $sLimMaxPingRspndrs; ?>
         </div>
       </div>
       
-      <div class="accessibility">
-        <label for="cbAccessibility">
-          <input type="checkbox" 
-                  class="cbAccessibility" 
-                  name="accessibility" 
-                  id="cbAccessibility" />
-          Private
-        </label>
-        <div class="accessibilityOpts">
-          <div>
-            App Key: <?php echo $m->appKey; ?>
-          </div>
-          
-          <div>
-            <h4>Responders</h4>
-            <div class="responders">
-              <?php foreach($m->responders as $r){ ?>
-              <div class="responder">
-                <?php echo $r->name; ?>
-              </div>
-              <?php } ?>
-            </div>
-          </div>
-          
-          <div class="urls">
-            <h4>Sample URLs</h4>
-            <div>
-              Domain:
-              <?php echo site_url('moment/integration'); ?>
-            </div>
-            <div>
-              Ping:
-              <input type="text" 
-                      editable="false" 
-                      class="samplePing" />
-            </div>
-            <div>
-              Pong:
-              <input type="text" 
-                      editable="false" 
-                      class="samplePong" />
-            </div>
-          </div>
-          
-          <div>
-            <h4>Limitations</h4>
-            <div>
-              <label for="cbLimitPingRad">
-                <input type="checkbox" 
-                      name="hasLimitedPingRadius" 
-                      id="cbHasLimitedPingRad" />
-                Limit ping radius to
-                <?php echo $m->limit_ping_radius; ?> KM
-            </div>
-            
-            <div>
-              <label for="cbLimitPongRad">
-                <input type="checkbox" 
-                      name="hasLimitedPongRadius" 
-                      id="cbLimitPongRad" />
-                Limit pong radius to
-                <?php echo $m->limit_pong_radius; ?> KM
-            </div>
-            
-            <div>
-              <label for="cbLimitMaxResponders">
-                <input type="checkbox" 
-                      name="limitMaxResponders" 
-                      id="cbLimitMaxResponders" />
-                Limit maximum responders to
-                <?php echo $m->limit_max_responders; ?>
-            </div>
-          </div>
-          
-        </div>
-      </div>
-      
-      <div class="large-6 medium-6 small-12 columns">
+      <div>
         <div>
-          <h4>During a ping</h4>
+          <h6>During a ping</h6>
           <div>
-            <label for="cbAllowOptMsgToResponder">
-              <input type="checkbox" 
-                    name="allowOptionalMessageToResponder" 
-                    id="cbAllowOptMsgToResponder" />
-              Allow the sender to send 
-              optional message to responder
+            <?php echo form_checkbox('', '', $sPingAllowSndOptMsgToRspndr); ?>
+            Allow the sender to send 
+            optional message to responder
           </div>
-          
-          <h4>During a pong</h4>
           <div>
-            
-            <div>
-              <input type="checkbox" 
-                      name="sendResponderDescription" 
-                      id="cbSndResponderDescr" />
-              <label for="cbSndResponderDescr">
-                For security, automatically send 
-                responder's description to ping sender
-            </div>
-            
-            <div>
-              <label for="cbSndNotifMsgToSndr">
-                <input type="checkbox" 
-                        name="sendNotifyMessageToSender" 
-                        id="cbSndNotifMsgToSndr" />
-                Send a notification message to ping sender
-            </div>
-            <div>
-              <div>
-                Title:
-                <?php echo $m->notify_message_title; ?>
-              </div>
-              <div>
-                Message:
-                <?php echo $m->notify_message; ?>
-              </div>
-            </div>
+            <?php echo form_checkbox('', '', $bPingUseOptMsgAsSrchKwd); ?>
+            Use optional sent message as search keyword
+          </div>            
+        </div>
+      </div>
+      
+      <div>
+        <h6>During a pong</h6>
+        <div>
+          <?php echo form_checkbox('', '', $bPongAutoSndRspndrDescr); ?>
+          For security, automatically send 
+          responder's description to ping sender
+        </div>
+        
+        <div>
+          <?php echo form_checkbox('', '', $bPongSndNotifMsgToSndr); ?>
+          Send a notification message to ping sender
+        </div>
+        <div>
+          <div>
+            Title <?php echo $sPongNotifMsgTtl; ?>
           </div>
-          
-          <h4>After service has been rendered</h4>
           <div>
-            <div>
-              <label for="cbSndPromptToSndr">
-                <input type="checkbox" 
-                      name="sendPromptToSender" 
-                      id="cbSndPromptToSndr" />
-                Send a prompt message to sender
-            </div>
-            <div>
-              <div>
-                Title:
-                <?php echo $m->prompt_message_title; ?>
-              </div>
-              <div>
-                Message:
-                <?php echo $m->prompt_message; ?>
-              </div>
-            </div>
+            Message <?php echo $sPongNotifMsg; ?>
           </div>
         </div>
       </div>
-    </div>
       
-    </div>
-    <div class="row">
-      <div class="large-1 medium-1 small-12 columns">
-        <a href="<?php echo site_url('moment'); ?>">Back</a>
-        <a href="<?php echo site_url('moment/update'); ?>">Edit</a>
+      <div>
+        <h6>After service has been rendered</h6>
+        <div>
+          <?php echo form_checkbox('', '', $bAftSvcSndPmtMsgToSndr); ?>
+          Send a prompt message to sender
+        </div>
+        <div>
+          <div>
+            Title <?php echo $sAftSvcPmtMsgTtl; ?>
+          </div>
+          <div>
+            Message <?php echo $sAftSvcPmtMsg; ?>
+          </div>
+        </div>
       </div>
+        
+      </div>
+      <div class="row">
+        <div class="large-12 medium-12 small-12 columns">
+          <a class="button small" href="<?php echo site_url('moment'); ?>">Back</a>
+          <a class="button small" href="<?php echo site_url('moment/update/' . $m->id); ?>">Edit</a>
+        </div>
+      </div>
+    </form>
     </div>
+    <script>
+      var a = new Moment();
+      a.setUserId("<?php echo $this->session->userdata('user')->id; ?>");
+    </script>
 </div>

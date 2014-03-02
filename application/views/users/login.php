@@ -1,4 +1,6 @@
 <div id="login" class="row">
+  <div class="bg"></div>
+  <div class="content">
   <div class="logo">
     <a href="<?php echo site_url('home'); ?>" title="Clarinet">
       <img src="<?php echo base_url('public/images/logo.png'); ?>" />
@@ -12,7 +14,7 @@
   <div>
     <div>
       <input type="text" 
-              name="email" 
+              name="email"
               placeholder="Email*" 
               value="<?php echo set_value('email', 'prezire@gmail.com'); ?>" />
     </div>
