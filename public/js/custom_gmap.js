@@ -36,21 +36,21 @@ function CustomGmap()
     Properties: longitude, latitude and distance.
   */
   this.onRadiusUpdated = function(info){/*Callback.*/};
-  this.createInfoWindow = function(marker, location)
+  this.createInfoWindow = function(marker, target)
   {
 	var s = '<div class="customGmapInfoWindow" style="width: 250px; height: 150px;">' + 
-      '<strong>' + location.name + '</strong>' + 
-      '<div>' + location.description + '</div>' +
-      '<div>' + location.address + '</div>' +
-	  '<div>' + location.latitude + '</div>' +
-	  '<div>' + location.longitude + '</div>' +
+      '<strong>' + target.name + '</strong>' + 
+      '<div>' + target.description + '</div>' +
+      '<div>' + target.address + '</div>' +
+	  '<div>' + target.latitude + '</div>' +
+	  '<div>' + target.longitude + '</div>' +
       '<div><a href="' + 
-      location.website + 
+      target.website + 
       '" target="_blank">' + 
-      location.website + 
+      target.website + 
       '</a></div>' +
-	  '<div>' + location.phone + '</div>' +
-	  '<div>' + location.email + '</div>' +
+	  '<div>' + target.phone + '</div>' +
+	  '<div>' + target.email + '</div>' +
     '</div>';
     var o = this;
     var info = new google.maps.InfoWindow({content: s});
@@ -79,7 +79,14 @@ function CustomGmap()
       }
     }
   };
-  this.createMarker = function(longitude, latitude, icon, draggable, title)
+  this.createMarker = function
+  ( 
+    latitude, 
+    longitude,
+    icon, 
+    draggable, 
+    title
+  )
   {
 	title = title ? title : '';
     var m = new google.maps.Marker

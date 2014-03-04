@@ -17,7 +17,7 @@
       <div>
         This is dedicated to businesses that offer services
         only to their special members. Let's say you have a 
-        hospital busines that tracks outdoor patient status. 
+        hospital business that tracks outdoor patient status. 
         In order to avoid noisy pings and receive only requests 
         from patients who are enrolled in your system, have this 
         feature enabled. This is applicable for devices as well.
@@ -30,7 +30,6 @@
       <div>
         Clarinet uses GPS to determine your location. 
         Cookies are used only for login purposes.
-        <br />
         Read our <a>privacy policy</a>.
       </div>
     </div>
@@ -39,7 +38,7 @@
   <section>
     <div class="header">Subscribe</div>
     <div>
-      Join our newsletter and be the first to know the latest Moments.
+      Join our newsletter and be the first to know newly released Moments.
     </div>
     <form>
       <input type="text" placeholder="Email" />

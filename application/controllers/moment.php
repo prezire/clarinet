@@ -8,46 +8,42 @@
       //validateSession();
       $this->load->model('moment_model');
     }
-    public final function test()
-    {
-      $this->load->view('moments/test');
-    }
-    //Allow user to be a responder and 
-    //provide services per vertical.
+    public final function test(){$this->load->view('moments/test');}
     /*
-    * @param  $state    Is determined based on 
-    * prev state from DB.
+      Allow user to be a responder and 
+      provide services per vertical.
+      If the user doesn't want to be a
+      responder, delete its state in the record.
+      
+      curl http://localhost/clarinet/index.php/moment/setUserState/1/1/Sender
     */
-    public final function setAsResponder
+    public final function setUserState
     (
-      $userId, 
-      $latLng,
-      $verticalId, 
-      $state = true)
+      $userId,
+      $momentId,
+      $state
+    )
     {
-      $b = $this->moment_model->setAsResponder
+      $b = $this->moment_model->setUserState
       (
-        $userId, 
-        $latLng,
-        $verticalId, 
+        $userId,
+        $momentId,
         $state
-      );
-      showJsonView(array('state' => $b));
+      )->row();
+      showJsonView(array('details' => $b));
     }
+    //curl http://localhost/clarinet/index.php/moment/readByFilter/1/Featured
     public final function readByFilter($userId, $filterName)
     {
+      $m = $this->moment_model->readByFilter
+      (
+        $userId, 
+        $filterName
+      );
       echo $this->parser->parse
       (
         'commons/partials/moments.php', 
-        array
-        (
-          'moments' => 
-          $this->moment_model->readByFilter
-          (
-            $userId, 
-            $filterName
-          )
-        ), 
+        array('moments' => $m->result()), 
         true
       );
     }
@@ -58,14 +54,13 @@
         'moments/index', 
         array
         (
-          //TODO: Include verticals in the filter.
-          'filter' => array
+          'filters' => array
           (
-            'All',
-            'Featured',
-            'Mostly Used',
-            'For Emergencies',
-            'I am the responder'
+            'All' => 'All',
+            'Featured' => 'Featured',
+            'Mostly used' => 'Mostly used',
+            'For emergencies' => 'For emergencies',
+            'I am the responder' => 'I am the responder'
           ),
           'moments' => $this->moment_model->index()
         )
@@ -76,15 +71,18 @@
     {
       echo $this->moment_model->generateAppKey();
     }
-    //Public ping/pong. Doesn't need integration. Everyone 
-    //registered in the app can use this feature.
     /*
-      curl 'http://localhost/clarinet/index.php/moment/ping/44'
+      Public ping/pong. Doesn't need integration. 
+      Everyone registered in the app can use this feature.
     
-      @param    $message            Optional. A message that 
-      the sender can include on the broadcast. It could be a description of himself, note or a path to his avatar 
-      to give the responder a clear idea about the sender.
-      @param    $latLng             Separated by space.
+      curl http://localhost/clarinet/index.php/moment/ping/5/1.3161467/103.8564607
+    
+      @param    $message  Optional. A message that 
+      the sender can include on the broadcast.
+      It could be a description of himself, note or a 
+      path to his avatar to give the responder a clear 
+      idea about the sender.
+      @param    $latLng   Separated by space.
       @param    $requestResponder   Boolean. Indicates that 
       responders who provide services will be notified 
       with this ping. Responders will then be able to accept 
@@ -93,9 +91,10 @@
     public final function ping
     (
       $id, 
-      $latLng = null,
-      $requestResponder = null,
-      $message = null
+      $latitude,
+      $longitude,
+      $requestResponder = false,
+      $privateMessage = null
     )
     {
       showJsonView
@@ -103,19 +102,35 @@
         array
         (
           'ping' => 
-          $this->moment_model->ping($verticalId)->row()
+          $this->moment_model->ping
+          (
+            $id, 
+            $latitude,
+            $longitude,
+            $requestResponder,
+            $privateMessage
+          )->row()
         )
       );
     }
-    //curl 'http://localhost/clarinet/index.php/moment/pong/3'
-    public final function pong($id, $latLng)
+    /*
+      curl 'http://localhost/clarinet/index.php/moment/pong/3'
+      @params   $latitude and $longitude    Determines if the 
+      responder is close enough from the sender's location.
+    */
+    public final function pong($id, $latitude, $longitude)
     {
       showJsonView
       (
         array
         (
           'pong' => 
-          $this->moment_model->pong($id, $latLng)->row()
+          $this->moment_model->pong
+          (
+            $id, 
+            $latitude, 
+            $longitude
+          )->row()
         )
       );
     }
@@ -128,13 +143,13 @@
       curl 'http://localhost/clarinet/index.php/moment/integration/ping/059727320a2a3c8293edf186bf112e5b/null/null/%7Bmessage:msg1%7D'
       curl 'http://localhost/clarinet/index.php/moment/integration/pong/059727320a2a3c8293edf186bf112e5b/1.2%203.4/1'
       
-      TODO: SQL and XSS security for message param.
+      TODO: SQL and XSS security for privateMessage param.
     */
     /*
-    * @param  $broadcastType  Either ping or pong.
-    * @param  $message        Any text messsage. Must be URL-encoded 
-    * @param  $latLng         The origin of the broadcast.
-    * @param  $responderId    Used only during pong. Unique ID of the responder.
+    * @param  $broadcastType    Either ping or pong.
+    * @param  $privateMessage   Any text messsage. Must be URL-encoded 
+    * @param  $latLng           The origin of the broadcast.
+    * @param  $responderId      Used only during pong. Unique ID of the responder.
     * when passing special chars.
     */
     public final function integration
@@ -143,7 +158,7 @@
       $appKey, 
       $latLng,
       $responderId = null, 
-      $message = null
+      $privateMessage = null
     )
     {
       switch($broadcastType)
@@ -153,7 +168,7 @@
           (
             $appKey, 
             $latLng, 
-            $message
+            $privateMessage
           );
         break;
         case 'pong':
@@ -164,7 +179,7 @@
               $appKey, 
               $responderId, 
               $latLng
-            )->row()->message
+            )->row()->private_message
           );
         break;
       }
@@ -226,16 +241,13 @@
         )
       );
     }
-    //curl --data 'user_id=1&vertical_id=1' 'http://localhost/clarinet/index.php/moment/subscribeAsResponder'
-    /*
-    * A user that listens and responds using pongs to provide services for ping senders.
-    */
-    public final function subscribeAsResponder()
+    //A simple subscription from the home page.
+    //Sends a newsletter to users for upcoming Moments.
+    public final function subscribe()
     {
       if($this->input->post())
       {
-        //@param  $userId   Post.
-        $this->moment_model->subscribeAsResponder();
+        $this->moment_model->subscribe();
       }
       else
       {

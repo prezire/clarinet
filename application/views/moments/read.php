@@ -23,6 +23,8 @@
         $bAftSvcSndPmtMsgToSndr = $m->after_service_enable_send_prompt_message_to_sender;
         $sAftSvcPmtMsgTtl = $m->after_service_prompt_message_title;
         $sAftSvcPmtMsg = $m->after_service_prompt_message;
+        //
+        $sDisabled = 'disabled';
       ?>
       <div>
         
@@ -43,7 +45,7 @@
         
         <div class="private">
           <div>
-            <?php echo form_checkbox('', '', $bPriv); ?>
+            <?php echo form_checkbox('', '', $bPriv, $sDisabled); ?>
             Private
           </div>
           <div>
@@ -64,19 +66,19 @@
       <div class="limitations">
         <h6>Limitations</h6>
         <div>
-          <?php echo form_checkbox('', '', $bLimMaxPingRad); ?>
+          <?php echo form_checkbox('', '', $bLimMaxPingRad, $sDisabled); ?>
           Limit ping radius to
           <?php echo $m->limit_max_ping_radius; ?> KM
         </div>
         
         <div>
-          <?php echo form_checkbox('', '', $bLimMaxPongRad); ?>
+          <?php echo form_checkbox('', '', $bLimMaxPongRad, $sDisabled); ?>
           Limit pong radius to
           <?php echo $sLimMaxPongRad; ?> KM
         </div>
         
         <div>
-          <?php echo form_checkbox('', '', $bLimMaxPingRspndrs); ?>
+          <?php echo form_checkbox('', '', $bLimMaxPingRspndrs, $sDisabled); ?>
           Limit maximum ping responders to
           <?php echo $sLimMaxPingRspndrs; ?>
         </div>
@@ -86,12 +88,12 @@
         <div>
           <h6>During a ping</h6>
           <div>
-            <?php echo form_checkbox('', '', $sPingAllowSndOptMsgToRspndr); ?>
+            <?php echo form_checkbox('', '', $sPingAllowSndOptMsgToRspndr, $sDisabled); ?>
             Allow the sender to send 
             optional message to responder
           </div>
           <div>
-            <?php echo form_checkbox('', '', $bPingUseOptMsgAsSrchKwd); ?>
+            <?php echo form_checkbox('', '', $bPingUseOptMsgAsSrchKwd, $sDisabled); ?>
             Use optional sent message as search keyword
           </div>            
         </div>
@@ -100,13 +102,13 @@
       <div>
         <h6>During a pong</h6>
         <div>
-          <?php echo form_checkbox('', '', $bPongAutoSndRspndrDescr); ?>
+          <?php echo form_checkbox('', '', $bPongAutoSndRspndrDescr, $sDisabled); ?>
           For security, automatically send 
           responder's description to ping sender
         </div>
         
         <div>
-          <?php echo form_checkbox('', '', $bPongSndNotifMsgToSndr); ?>
+          <?php echo form_checkbox('', '', $bPongSndNotifMsgToSndr, $sDisabled); ?>
           Send a notification message to ping sender
         </div>
         <div>
@@ -122,7 +124,7 @@
       <div>
         <h6>After service has been rendered</h6>
         <div>
-          <?php echo form_checkbox('', '', $bAftSvcSndPmtMsgToSndr); ?>
+          <?php echo form_checkbox('', '', $bAftSvcSndPmtMsgToSndr, $sDisabled); ?>
           Send a prompt message to sender
         </div>
         <div>

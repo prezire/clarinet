@@ -5,7 +5,7 @@ var Clarinet = Backbone.Model.extend
   sPubUrl: 'http://localhost/clarinet/public/',
   constructor: function()
   {
-    this.setListeners();  
+    this.setListeners();
     this.gm = new CustomGmap();
   },
   setListeners: function()
@@ -24,7 +24,7 @@ var Clarinet = Backbone.Model.extend
       var g = lng;
       $('.lat').val(t);
       $('.lng').val(g);
-      o.gm.removeAllMarkers();
+      //o.gm.removeAllMarkers();
       var mkr = o.gm.createMarker
       (
         g, 
@@ -61,8 +61,6 @@ var Clarinet = Backbone.Model.extend
   fetchSenderLocation: function()
   {
     var o = this;
-    o.onSenderLocationFetched(1, 2);
-    return;
     if(navigator.geolocation)
     {
       navigator.geolocation.getCurrentPosition
@@ -101,15 +99,15 @@ var Moment = Clarinet.extend
     responded within an hour, mark it as unconfirmed in DB.
   */
   sTok: null,
-  //sUserState: null,
   sUserId: null,
   sVert: null,
   iPong: null,
   //
   constructor: function()
   {
-    //this.setUserState($('.selUserState').val());
     this.setListeners();
+    //this.gm = new CustomGmap();
+    //this.gm.init('#gmap', false);
   },
   setAppKey: function()
   {
@@ -123,60 +121,37 @@ var Moment = Clarinet.extend
   {
     this.sUserId = value;
   },
-  /*
-  * Sets the user to either sender or responder.
-  * Default state will be in the settings.
-  * @param  state   Either sender or responder.
-  */
-  /*setUserState: function(state)
-  {
-    var o = this;
-    this.sUserState = state;
-    if(state == 'responder')
-    {
-      //User is app_subscriber. Use pong every 
-      //3 seconds to listen for any pings from DB.
-      this.iPong = setInterval(function()
-      {
-        o.pong();
-      }, 3000);
-    }
-    else
-    {
-      if(this.iPong)
-      {
-        clearInterval(this.iPong);
-      }
-      //Do nothing.
-    }
-  },*/
   expandMap: function(expand, icon,title, momentId)
   {
-    if(expand)
-    {
-      var o = this;
-      $('#moments .map .icon').attr('src', icon);
-      $('#moments .map .title').html(title);
-      //Ping, but this time, force to ask for responders.
-      $('#moments .map .btnBroadcast').click
-      (
-        function(e)
-        {
-          e.preventDefault();
-          o.ping(momentId, true);
-        }
-      );
-    }
+    var o = this;
     $('#moments .map').animate
     (
-      {height: expand ? '400px' : 0}
+      {height: expand ? '400px' : 0},
+      {complete: function(){
+        if(expand)
+        {
+          var o = this;
+          //$('#moments .map .icon').attr('src', icon);
+          $('#moments .map .title').html(title);
+          //Ping, but this time, 
+          //force to ask for responders.
+          $('#moments .map .btnBroadcast').click
+          (
+            function(e)
+            {
+              e.preventDefault();
+              o.ping(momentId, true);
+            }
+          );
+        }
+      }}
     );
   },
   //KLUDGE Not using btn callback 
   //to prevent losing the ref.
   onPing: function(target)
   {
-    var t = target
+    var t = $(target);
     var momentId = t.attr('id');
     var title = t.attr('title');
     var icon = t.attr('icon');
@@ -194,9 +169,16 @@ var Moment = Clarinet.extend
   setListeners: function()
   {
     var o = this;
-    /*$('.btnSetUserState').click(function(){
-      o.setUserState($('.selUserState').val());
-    });*/
+    $('#moments .filter').change(function(){
+      var t = $(this);
+      var url = o.sRelUrl + 
+      'moment/readByFilter/' + 
+      o.sUserId + '/' + 
+      encodeURIComponent(t.val());
+      $.ajax({url: url, success: function(response){
+        $('#moments .momentsCntr').html(response);
+      }});
+    });
     $('#moments .map .btnCollapse').click
     (
       function(e)
@@ -205,8 +187,7 @@ var Moment = Clarinet.extend
         o.expandMap(false);
       }
     );
-    //Toggle as responder.
-    $('#moments .moment .btnSetAsRspndr').click
+    $('#moments .moment .btnToggleState').click
     (
       function(e)
       {
@@ -214,7 +195,14 @@ var Moment = Clarinet.extend
         var o = this;
         var t = $(this);
         var img = t.children('img');
-        var url = t.attr('href');
+        var momentId = t.attr('momentId');
+        var state = 
+        t.attr('state') == 'Sender' ?
+        'Responder' : 
+        'Sender';
+        var url = t.attr('href') + 
+        '/' + momentId + 
+        '/' + state;
         $.ajax
         (
           {
@@ -228,9 +216,10 @@ var Moment = Clarinet.extend
                 decides to set himself as a 
                 responder for any Moments.
               */
-              var s = response.state ? 
-              'responder_state_true' : 
-              'responder_state_false';
+              var s = 
+              response.details.state == 'Sender' ? 
+              'user_state_sender' : 
+              'user_state_responder';
               img.attr('src', o.sPubUrl + s + '.png');
             }
           }
@@ -403,20 +392,61 @@ var Moment = Clarinet.extend
     );
   },
   //Public meths.
-  ping: function(id, requestForResponder)
+  ping: function(momentId, requestForResponder)
   {
     var o = this;
+    //TODO: Remove.
+    requestForResponder = true;
+    //
+    //Fetch users's coords using browser.
     this.onSenderLocationFetched = function(lat, lng)
     {
-      var latLng = lat + ' ' + lng;
+      //Center to user's loc.
+      o.gm.removeAllMarkers();
+      var mkr = o.gm.createMarker
+      (
+        lat, lng, 
+        o.gm.createIcon
+        (
+          '../public/images/radius_map_pin.png', 
+          32, 32, 8, 13
+        ),
+        //Make user's loc draggable for err correction.
+        true
+      );
+      o.gm.createInfoWindow(mkr, {});
+      o.gm.map.setCenter(mkr.getPosition());
+      //
       if(requestForResponder)
       {
+        //Request for responders near this sender.
+        //Use the momentId to get moment's model props.
         $.ajax
         ({
-          url: 'moment/ping/' + 
-          id + '/' + latLng, 
-          success: function(response){
-            //Displ responders.
+          url: sRelUrl + 'moment/ping/' + 
+          momentId + '/' + lat + '/' + lng, 
+          success: function(response)
+          {
+            var r = response;
+            var locs = r.locations; 
+            for(var a = 0; a < locs.length; a++)
+            {
+              var l = locs[a];
+              var mkr = o.gm.createMarker
+              (
+                l.latitude,
+                l.longitude, 
+                o.gm.createIcon
+                (
+                  '../public/images/radius_map_pin.png', 
+                  32, 32, 
+                  8, 13
+                ),
+                false
+              );
+              o.gm.createInfoWindow(mkr, l);
+              o.gm.map.setCenter(mkr.getPosition());
+            }
           }
         });
       }
@@ -510,7 +540,7 @@ var Radius = Clarinet.extend
         method: 'GET',
         success: function(response)
         {
-          o.gm.removeAllMarkers();
+          //o.gm.removeAllMarkers();
           //
           var locs = response.locations;
           for(var a = 0; a < locs.length; a++)

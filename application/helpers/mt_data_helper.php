@@ -17,9 +17,15 @@
     if(!$CI->session->userdata('user')->id)
       redirect(site_url('user/login'));
   }
-  function isSuperAdmin()
+  function userIs($roleName)
   {
-    $CI = &get_instance();
-    return $CI->session->userdata('user')->role_id == 1;
+    $CI = get_instance();
+    $uId = $CI->session->userdata('user')->role_id;
+    $roleId = $CI->db->get_where
+    (
+      'roles', 
+      array('name' => $roleName)
+    )->row()->id;
+    return $roleId == $uId;
   }
 ?>

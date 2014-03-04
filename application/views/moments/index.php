@@ -3,7 +3,8 @@
     <div class="large-12 medium-12 small-12 columns map">
       <div class="focused">
         <a class="btnBroadcast" title="Click to request for responders.">
-          <img class="icon" />
+          <img src="<?php echo base_url('public/images/radius_generic_map_pin.png'); ?>" 
+                class="icon" />
           <span class="title"></span>
         </a>
       </div>
@@ -13,15 +14,7 @@
       <div id="gmap"></div>
     </div>
     <div class="large-12 medium-12 small-12 columns">
-      <?php 
-        echo form_dropdown
-        (
-          'filter', 
-          $filter, 
-          0, 
-          'class="filter"'
-        );
-      ?>
+      <?php echo form_dropdown('', $filters, 1, 'class="filter"'); ?>
       <div>
         <div class="large-11 medium-10 small-9 columns">
           <input type="text" class="txtSearch" />
@@ -31,7 +24,7 @@
         </div>
       </div>
       <?php
-        if(isSuperAdmin())
+        if(userIs('Super Administrator'))
         {
       ?>
       <div class="createCntr large-12 medium-12 small-12 columns">
@@ -41,17 +34,20 @@
         </a>
       </div>
       <?php } ?>
-      <?php 
-        echo $this->parser->parse
-        (
-          'commons/partials/moments.php', 
-          array('moments' => $moments->result()), 
-          true
-        );
-      ?>
+      <div class="momentsCntr">
+        <?php 
+          echo $this->parser->parse
+          (
+            'commons/partials/moments.php', 
+            array('moments' => $moments->result()), 
+            true
+          );
+        ?>
+      </div>
     </div>
   </div>
   <script>
-    new Moment();
+    new Moment().
+    setUserId(<?php echo $this->session->userdata('user')->id; ?>);
   </script>
 </div>

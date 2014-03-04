@@ -5,84 +5,54 @@
     {
       parent::__construct();
     }
-    //1 to 1 record.
-    public final function setAsResponder
-    (
-      $userId, 
-      $latLng,
-      $verticalId, 
-      $state
-    )
-    {
-      //Search for existing records.
-      $this->db->select('id');
-      $this->db->from('moment_responders');
-      $this->db->where('users_id', $userId);
-      $this->db->where('verticals_id', $verticalId);
-      $q = $this->db->get();
-      $i = $this->db->num_rows();
-      $q->free_result();
-      //
-      if($i > 0)
-      {
-        //Wants to be a responder.
-        if($state)
-        {
-          //Update only the $latLng.
-          $this->db->where('users_id', $userId);
-          $this->db->update
-          (
-            'moment_responders', 
-            array('lat_lng' => $latLng)
-          );
-          return true;
-        }
-        else
-        {
-          //Delete any records as a responder.
-          $this->db->where('users_id', $userId);
-          $this->db->where('verticals_id', $verticalId);
-          $this->db->delete('moment_responders');
-          //No longer a responder.
-          return false;
-        }
-      }
-      else
-      {
-        //No records found. By default, not a responder.
-        return false;
-      }
-    }
     public final function readByFilter($userId, $filterName)
     {
-      $this->db->select('*');
+      $filterName = urldecode($filterName);
       switch($filterName)
       {
         case 'All':
-          //Do nothing.
+          $this->db->select("m.*, mus.state");
+          $this->db->from('moments m');
+          $this->db->join('moment_user_states mus', 'm.id = mus.moments_id', 'left');
         break;
         case 'Featured':
-          //TODO: Implement ping_count in DB and show the top 4.
-          //Enhance this algo.
-          //$this->db->order_by('ping_count DESC');
-          //$this->db->limit(4);
+          $this->db->select("m.*, mus.state");
+          $this->db->from('moments m');
+          $this->db->join('moment_user_states mus', 'm.id = mus.moments_id', 'left');
+          $this->db->limit(4);
         break;
-        case 'For Emergencies':
+        case 'Mostly used':
+          //TODO: Enhance.
+          $this->db->select("m.*, MAX(COUNT(SELECT type FROM moment_broadcasts WHERE type = 'Ping')) count, mus.state");
+          $this->db->from('moments m');
+          $this->db->join('moment_user_states mus', 'm.id = mus.moments_id');
+          $this->db->limit(4);
+        break;
+        case 'For emergencies':
+          $this->db->select("m.*, mus.state");
           $this->db->like('tags', 'emergency');
         break;
         case 'I am the responder':
-          $this->db->join('moment_responders mr', 'm.id = mr.moments_id');
-          $this->db->where('mr.users_id', $userId);
+          $this->db->select("m.*, mus.state");
+          $this->db->from('moments m');
+          $this->db->join('moment_user_states mus', 'm.id = mus.moments_id');
+          $this->db->where('mus.users_id', $userId);
         break;
       }
-      $this->from('moments m');
+      $this->db->order_by('m.name ASC');
       return $this->db->get();
     }
+    //KLUDGE: Moments with no matching states are null. 
+    //Nulls must automatically be senders.
     public final function index()
     {
-      $this->db->select('*');
+      $this->db->select("m.*, mus.state");
       $this->db->from('moments m');
-      $this->db->order_by('name ASC');
+      $this->db->join('moment_user_states mus', 'm.id = mus.moments_id', 'left');
+      //BUG: Must match user's state only and not from other users.
+      //$uId = $this->session->userdata('user')->id;
+      //$this->db->where('mus.users_id', $uId);
+      $this->db->order_by('m.name ASC');
       return $this->db->get();
     }
     public final function incrementBogusLevel()
@@ -98,23 +68,33 @@
       );
     }
     //Public ping / pong broadcasts.
-    public final function ping($id, $latLng, $message)
+    public final function ping
+    (
+      $id, 
+      $latitude, 
+      $longitude, 
+      $privateMessage
+    )
     {
-      $mId = $this->db->get_where
-      (
-        'moments', 
-        array('id' => $id)
-      )->row()->id;
       $a = array
       (
-        'moments_id' => $mId,
-        'lat_lng' => $latLng,
-        'message' => $message
+        'moments_id' => $id,
+        'latitude' => $latitude,
+        'longitude' => $longitude,
+        'private_message' => $privateMessage,
+        'type' => 'Ping'
       );
-      return $this->db->insert('moment_pings', $a);
+      $this->db->insert('moment_broadcasts', $a);
+      $id = $this->db->insert_id();
+      return $this->db->get_where
+      (
+        'moment_broadcasts', 
+        array('id' => $id)
+      );
     }
     //Returns only Moments that are public 
     //closest to the responder's origin.
+    //TODO: Set matched ping's ponged field to true.
     public final function pong($id, $latLng)
     {
       $s = "SELECT *, (6371 * acos(cos(radians($latitude)) * " .
@@ -133,7 +113,7 @@
     }
     //
     //Creates or updates a ping if it exists.
-    public final function createPrivatePing
+    /*public final function createPrivatePing
     (
       $appKey, 
       $latLng, 
@@ -226,7 +206,7 @@
     {
       $p = $this->input->post('private');
       return $p == 'on' ? 1 : 0;
-    }
+    }*/
     public final function read($id)
     {
       $this->db->select('m.*, v.name vertical');
@@ -238,8 +218,10 @@
     public final function create()
     {
       $i = $this->input;
+      $this->config->load('custom_configs');
       $a = array
       (
+        'icon_path' => $this->config->item('moment_default_icon_path'),
         'private' => $this->getPrivateValue(),
         'name' => $i->post('name'),
         'description' => $i->post('description'),
@@ -306,20 +288,37 @@
       $a['after_service_prompt_message'] = $i->post('promptMessage');
       return $this->db->update('moments', $a);
     }
-    //one to one.
-    public final function subscribeAsResponder()
+    //One to one record.
+    public final function setUserState
+    (
+      $userId,
+      $momentId,
+      $state
+    )
     {
-      $i = $this->input;
+      //Search for existing records and delete it.
+      $this->db->where('users_id', $userId);
+      $this->db->where('moments_id', $momentId);
+      $this->db->delete('moment_user_states');
+      //Insert a new record and state.
       $this->db->insert
       (
-        'moment_ping_responders', 
+        'moment_user_states', 
         array
         (
-          'vertical_id' => $i->post('verticalId'),
-          'user_id' => $i->post('userId')
+          'moments_id' => $momentId,
+          'users_id' => $userId,
+          'state' => $state
         )
       );
+      $id = $this->db->insert_id();
+      return $this->db->get_where
+      (
+        'moment_user_states', 
+        array('id' => $id)
+      );
     }
+    public final function subscribe(){}
     //
     public final function readRecentlyAdded($limit = 2)
     {

@@ -282,7 +282,7 @@
         
       </div>
       <div class="row">
-        <div class="large-1 medium-1 small-12 columns">
+        <div class="large-2 medium-2 small-12 columns">
           <button>Go</button>
           <a class="button small" 
               href="<?php echo site_url('moment/read/' . $m->id); ?>">

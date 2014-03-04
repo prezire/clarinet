@@ -3,7 +3,12 @@
   <div class="content">
   <div class="logo">
     <a href="<?php echo site_url('home'); ?>" title="Clarinet">
-      <img src="<?php echo base_url('public/images/logo.png'); ?>" />
+      <div>
+        <img src="<?php echo base_url('public/images/logo_cube.png'); ?>" />
+      </div>
+      <div>
+        <img src="<?php echo base_url('public/images/logo.png'); ?>" />
+      </div>
     </a>
   </div>
   <?php 

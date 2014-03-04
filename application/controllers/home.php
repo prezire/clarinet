@@ -5,7 +5,7 @@
     public function __construct()
     {
       parent::__construct();
-      //validateSession();
+      $this->output->cache(60);
     }
     public final function index(){showView('home');}
     public final function settings(){showView('settings');}

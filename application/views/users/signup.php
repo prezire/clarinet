@@ -1,6 +1,5 @@
 <div id="signup">
-  <?php 
-    if(isset($error)) echo '<p>' . $error . '</p>';
+  <?php
     echo validation_errors();
     echo form_open('user/signup'); 
   ?>
