@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Mar 04, 2014 at 02:47 AM
+-- Generation Time: Mar 05, 2014 at 02:32 AM
 -- Server version: 5.5.16
 -- PHP Version: 5.3.8
 
@@ -35,15 +35,28 @@ CREATE TABLE IF NOT EXISTS `ads` (
   `width` int(11) NOT NULL,
   `height` int(11) NOT NULL,
   `media_type` enum('Image','SWF') NOT NULL,
-  `owner_complete_name` varchar(50) NOT NULL,
-  `owner_email` varchar(50) NOT NULL,
-  `owner_address` varchar(255) NOT NULL,
-  `owner_mobile` int(15) NOT NULL,
-  `from` datetime NOT NULL,
-  `to` datetime NOT NULL,
+  `users_id` int(11) NOT NULL,
+  `date_from` datetime NOT NULL,
+  `date_to` datetime NOT NULL,
   `bid_amount` float NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+  `impressions` int(11) NOT NULL,
+  `clicks` int(11) NOT NULL,
+  `clickthrough_url` varchar(400) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `users_id` (`users_id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=7 ;
+
+--
+-- Dumping data for table `ads`
+--
+
+INSERT INTO `ads` (`id`, `name`, `description`, `tags`, `banner_path`, `width`, `height`, `media_type`, `users_id`, `date_from`, `date_to`, `bid_amount`, `impressions`, `clicks`, `clickthrough_url`) VALUES
+(1, 'test', 'test', 'test', '', 0, 0, '', 0, '2014-01-01 12:00:00', '2014-02-02 12:01:01', 1000, 0, 0, ''),
+(2, 'test', 'test', 'test', '', 0, 0, '', 0, '2014-01-01 12:00:00', '2014-02-02 12:01:01', 1000, 0, 0, ''),
+(3, 'test', 'test', 'test', '', 0, 0, '', 0, '2014-01-01 12:00:00', '2014-02-02 12:01:01', 1000, 0, 0, ''),
+(4, 'test1', 'tewt1', 'fsf', '', 0, 0, '', 1, '2014-01-01 12:00:00', '2014-01-01 12:00:00', 2, 0, 0, ''),
+(5, 'test1', 'tewt1', 'fsf', '', 0, 0, '', 1, '2014-01-01 12:00:00', '2014-01-01 12:00:00', 2, 0, 0, ''),
+(6, 'slkdfj', 'flskfj', 'lskdf', '', 0, 0, '', 1, '2014-01-01 12:00:00', '2014-02-02 12:01:01', 234, 0, 0, 'http://www.slkdfjsldkf.com');
 
 -- --------------------------------------------------------
 
@@ -151,6 +164,26 @@ INSERT INTO `moment_broadcasts` (`id`, `type`, `moments_id`, `latitude`, `longit
 (6, 'Ping', 5, 1.31615, 103.856, 0, '2014-03-02 14:23:44', 0, '0'),
 (7, 'Ping', 5, 1.31615, 103.856, 0, '2014-03-03 15:29:21', 0, '0'),
 (8, 'Ping', 5, 1.31615, 103.856, 0, '2014-03-03 15:30:14', 0, '0');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `moment_release_subscriptions`
+--
+
+CREATE TABLE IF NOT EXISTS `moment_release_subscriptions` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `email` varchar(50) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `email` (`email`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=2 ;
+
+--
+-- Dumping data for table `moment_release_subscriptions`
+--
+
+INSERT INTO `moment_release_subscriptions` (`id`, `email`) VALUES
+(1, 'prezire@gmail.com');
 
 -- --------------------------------------------------------
 
@@ -286,26 +319,6 @@ INSERT INTO `roles` (`id`, `name`) VALUES
 (1, 'Super Administrator'),
 (2, 'CMS Administrator'),
 (3, 'Public User');
-
--- --------------------------------------------------------
-
---
--- Table structure for table `subscriptions`
---
-
-CREATE TABLE IF NOT EXISTS `subscriptions` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `email` varchar(50) NOT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `email` (`email`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=2 ;
-
---
--- Dumping data for table `subscriptions`
---
-
-INSERT INTO `subscriptions` (`id`, `email`) VALUES
-(1, 'prezire@gmail.com');
 
 -- --------------------------------------------------------
 

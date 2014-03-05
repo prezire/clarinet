@@ -11,5 +11,10 @@
         View Settings
       </a>
     </li>
+    <li>
+      <a href="<?php echo site_url('ad'); ?>">
+        Ads
+      </a>
+    </li>
   </ul>
 </div>

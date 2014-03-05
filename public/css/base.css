@@ -671,6 +671,14 @@ footer a:hover
 #forgotPassword,
 #signup{margin: 0 10px;}
 
+/*Ad.*/
+#ad .create table,
+#ad .read table,
+#ad .update table{text-align: left;}
+#ad .create table td:nth-child(1),
+#ad .read table td:nth-child(1),
+#ad .update table td:nth-child(1){width: 140px;}
+
 @media only screen and (min-width: 40.063em)
 {
   .top-bar-section li a:not(.button):hover,

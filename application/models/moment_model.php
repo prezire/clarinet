@@ -237,7 +237,7 @@
       //TODO: Create folder to store multiple icons per Moment.
       //$this->load->helper('inflector');
       //$pre = strtolower(underscore($name));
-      $a['upload_path'] = base_url('public/images/uploads/moments/icons');
+      $a['upload_path'] = base_url('public/uploads/moments/icons');
       $a['allowed_types'] = 'gif|jpg|png';
       $a['max_width']  = '20';
       $a['max_height']  = '20';
